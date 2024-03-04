@@ -17,8 +17,8 @@ window.onload = function () {
   }
 
   const color_list = ["red", "green", "blue", "yellow"]
-  const selected_tile = []
-  const color_sequence = []
+  let selected_tiles = []
+  let color_sequence = []
 
 
 
@@ -59,22 +59,36 @@ window.onload = function () {
 
   function letUserClick() {
     board.classList.remove("unclickable")
+  }
 
+  function checkColor(element) {
+    const color = element.getAttribute(`data-tile`)
+    selected_tiles.push(color)
+    if (color !== color_sequence[selected_tiles.length - 1]) {
+      playAudio("wrong")
+      color_sequence = []
+      setTimeout(function () {
+        alert("YOU LOSE")
+      }, 500)
+
+    } else {
+      playAudio(color)
+    }
   }
 
   tiles.forEach(element => {
     element.addEventListener("click", function () {
-
-      playAudio(element.getAttribute('data-tile'))
-
+      checkColor(element)
     })
   })
 
+  // play round on pressing play(unfinished code)
   play.addEventListener("click", function () {
     addToSequence()
     playSequence()
-    // displaySequence()
-    console.log(color_sequence)
+    letUserClick()
+    selected_tiles = []
 
+    console.log(color_sequence)
   })
 }
