@@ -22,6 +22,15 @@ window.onload = function () {
 
 
 
+  function playAudio(item) {
+    const audio = new Audio(audio_files[item])
+    audio.play()
+  }
+
+  function addToSequence() {
+    color_sequence.push(color_list[Math.floor(Math.random() * 4)])
+  }
+
 
 
 
