@@ -31,6 +31,15 @@ window.onload = function () {
     color_sequence.push(color_list[Math.floor(Math.random() * 4)])
   }
 
+  function getElementByColor(color) {
+    for (let i = 0; i < 4; i++) {
+      const element = tiles[i]
+      const element_color = tiles[i].getAttribute(`data-tile`)
+      if (element_color === color) {
+        return element
+      }
+    }
+  }
 
   function playSequence() {
     for (let i = 0; i < color_sequence.length; i++) {
