@@ -32,7 +32,21 @@ window.onload = function () {
   }
 
 
+  function playSequence() {
+    for (let i = 0; i < color_sequence.length; i++) {
+      const element = getElementByColor(color_sequence[i])
+      const element_color = element.getAttribute(`data-tile`)
+      console.log(element, element_color)
+      setTimeout(function () {
+        playAudio(element_color)
+        element.classList.remove("inactive")
+        setTimeout(function () {
+          element.classList.add("inactive")
+        }, 800)
+      }, 1000 * i)
 
+    }
+  }
 
 
   tiles.forEach(element => {
