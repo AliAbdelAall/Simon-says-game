@@ -57,14 +57,24 @@ window.onload = function () {
     }
   }
 
+  function letUserClick() {
+    board.classList.remove("unclickable")
+
+  }
 
   tiles.forEach(element => {
     element.addEventListener("click", function () {
+
+      playAudio(element.getAttribute('data-tile'))
 
     })
   })
 
   play.addEventListener("click", function () {
+    addToSequence()
+    playSequence()
+    // displaySequence()
+    console.log(color_sequence)
 
   })
 }
