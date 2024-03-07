@@ -32,15 +32,14 @@ window.onload = function () {
 
 
 
-  // function getElementByColor(color) {
-  //   for (let i = 0; i < 4; i++) {
-  //     const element = tiles[i]
-  //     const element_color = tiles[i].getAttribute(`data-tile`)
-  //     if (element_color === color) {
-  //       return element
-  //     }
-  //   }
-  // }
+  function getElementByColor(color) {
+    for (let i = 0; i < 4; i++) {
+      if (tiles[i].getAttribute(`data-tile`) === color) {
+        return tiles[i]
+      }
+    }
+  }
+
   function addToSequence() {
     color_sequence.push(color_list[Math.floor(Math.random() * 4)])
   }
@@ -60,17 +59,20 @@ window.onload = function () {
     incrementLevel()
     for (let i = 0; i < color_sequence.length; i++) {
       const element = getElementByColor(color_sequence[i])
-      const element_color = element.getAttribute(`data-tile`)
-      console.log(element, element_color)
-      setTimeout(function () {
-        playAudio(element_color)
-        element.classList.remove("inactive")
-        setTimeout(function () {
-          element.classList.add("inactive")
-        }, 800)
-      }, 1000 * i)
-
     }
+    // for (let i = 0; i < color_sequence.length; i++) {
+    //   const element = getElementByColor(color_sequence[i])
+    //   const element_color = element.getAttribute(`data-tile`)
+    //   console.log(element, element_color)
+    //   setTimeout(function () {
+    //     playAudio(element_color)
+    //     element.classList.remove("inactive")
+    //     setTimeout(function () {
+    //       element.classList.add("inactive")
+    //     }, 800)
+    //   }, 1000 * i)
+
+    // }
   }
 
   // function letUserClick() {
