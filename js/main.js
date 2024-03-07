@@ -25,10 +25,10 @@ window.onload = function () {
 
 
 
-  // function playAudio(item) {
-  //   const audio = new Audio(audio_files[item])
-  //   audio.play()
-  // }
+  function playAudio(item) {
+    const audio = new Audio(audio_files[item])
+    audio.play()
+  }
 
 
 
@@ -59,20 +59,14 @@ window.onload = function () {
     incrementLevel()
     for (let i = 0; i < color_sequence.length; i++) {
       const element = getElementByColor(color_sequence[i])
+      setTimeout(function () {
+        playAudio(color_sequence[i])
+        element.classList.remove("inactive")
+        setTimeout(function () {
+          element.classList.add("inactive")
+        }, 600)
+      }, 1000 * i)
     }
-    // for (let i = 0; i < color_sequence.length; i++) {
-    //   const element = getElementByColor(color_sequence[i])
-    //   const element_color = element.getAttribute(`data-tile`)
-    //   console.log(element, element_color)
-    //   setTimeout(function () {
-    //     playAudio(element_color)
-    //     element.classList.remove("inactive")
-    //     setTimeout(function () {
-    //       element.classList.add("inactive")
-    //     }, 800)
-    //   }, 1000 * i)
-
-    // }
   }
 
   // function letUserClick() {
