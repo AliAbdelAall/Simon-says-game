@@ -19,29 +19,45 @@ window.onload = function () {
   const color_list = ["red", "green", "blue", "yellow"]
   let selected_tiles = []
   let color_sequence = []
+  let comp_turn = true
+  let level_counter = 0
+  let high_score_counter = 0
 
 
 
-  function playAudio(item) {
-    const audio = new Audio(audio_files[item])
-    audio.play()
-  }
+  // function playAudio(item) {
+  //   const audio = new Audio(audio_files[item])
+  //   audio.play()
+  // }
 
+
+
+  // function getElementByColor(color) {
+  //   for (let i = 0; i < 4; i++) {
+  //     const element = tiles[i]
+  //     const element_color = tiles[i].getAttribute(`data-tile`)
+  //     if (element_color === color) {
+  //       return element
+  //     }
+  //   }
+  // }
   function addToSequence() {
     color_sequence.push(color_list[Math.floor(Math.random() * 4)])
   }
 
-  function getElementByColor(color) {
-    for (let i = 0; i < 4; i++) {
-      const element = tiles[i]
-      const element_color = tiles[i].getAttribute(`data-tile`)
-      if (element_color === color) {
-        return element
-      }
+  function incrementLevel() {
+    level_counter += 1
+    if (high_score_counter < level_counter) {
+      high_score_counter = level_counter - 1
     }
+    level.innerText = level_counter
+    high_score.innerText = high_score_counter
+    console.log(level)
   }
 
   function playSequence() {
+    addToSequence()
+    incrementLevel()
     for (let i = 0; i < color_sequence.length; i++) {
       const element = getElementByColor(color_sequence[i])
       const element_color = element.getAttribute(`data-tile`)
@@ -57,37 +73,42 @@ window.onload = function () {
     }
   }
 
-  function letUserClick() {
-    board.classList.remove("unclickable")
+  // function letUserClick() {
+  //   board.classList.remove("unclickable")
+  // }
+
+  // function checkColor(element) {
+  //   const color = element.getAttribute(`data-tile`)
+  //   selected_tiles.push(color)
+  //   if (color !== color_sequence[selected_tiles.length - 1]) {
+  //     playAudio("wrong")
+  //     color_sequence = []
+  //     setTimeout(function () {
+  //       alert("YOU LOSE")
+  //     }, 500)
+
+  //   } else {
+  //     playAudio(color)
+  //   }
+  // }
+
+  // tiles.forEach(element => {
+  //   element.addEventListener("click", function () {
+  //     checkColor(element)
+  //   })
+  // })
+
+  const playGame = () => {
+    if (comp_turn) {
+      playSequence()
+    } else { letUserClick() }
   }
 
-  function checkColor(element) {
-    const color = element.getAttribute(`data-tile`)
-    selected_tiles.push(color)
-    if (color !== color_sequence[selected_tiles.length - 1]) {
-      playAudio("wrong")
-      color_sequence = []
-      setTimeout(function () {
-        alert("YOU LOSE")
-      }, 500)
-
-    } else {
-      playAudio(color)
-    }
-  }
-
-  tiles.forEach(element => {
-    element.addEventListener("click", function () {
-      checkColor(element)
-    })
-  })
-
-  // play round on pressing play(unfinished code)
-  play.addEventListener("click", function () {
-    addToSequence()
-    playSequence()
-    letUserClick()
-    selected_tiles = []
+  play.addEventListener("click", () => {
+    playGame()
+    // playSequence()
+    // letUserClick()
+    // selected_tiles = []
 
     console.log(color_sequence)
   })
