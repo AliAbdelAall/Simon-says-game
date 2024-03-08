@@ -15,7 +15,7 @@ window.onload = function () {
     lose: "/sounds/game-over.wav",
     wrong: "/sounds/wrong.mp3"
   }
-
+  high_score.innerText = localStorage.getItem("highScore")
   const start_info = "Make it to 12 to win!"
 
   const color_list = ["red", "green", "blue", "yellow"]
@@ -48,7 +48,9 @@ window.onload = function () {
       level.innerText = round
     }
     if (high_score_counter < round) {
-      high_score.innerText = round - 1
+      high_score_counter = round - 1;
+      localStorage.setItem("highScore", high_score_counter);
+      high_score.innerText = high_score_counter;
     }
   }
 
@@ -118,7 +120,7 @@ window.onload = function () {
   }
 
   const playGame = () => {
-    if (round_counter < 2) {
+    if (round_counter < 12) {
       round_counter++
       incrementLevel(round_counter)
       if (comp_turn) {
