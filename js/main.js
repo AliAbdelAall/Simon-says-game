@@ -126,12 +126,14 @@ window.onload = function () {
       }
     } else {
       playAudio("win")
+      round_counter = 0
+      color_sequence = []
+      comp_turn = true
       info.innerText = "You Win"
       info.style.color = "green"
       info.style.fontSize = "32px"
       play.style.display = "block"
-      round_counter = 0
-      playSequence = []
+
     }
   }
 
@@ -142,6 +144,7 @@ window.onload = function () {
   })
 
   play.addEventListener("click", () => {
+    console.log("clicked")
     hidePlayButton()
     playGame()
   })
