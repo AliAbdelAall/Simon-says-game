@@ -11,26 +11,25 @@ window.onload = function () {
     blue: "/sounds/blue.mp3",
     green: "/sounds/green.mp3",
     yellow: "/sounds/yellow.mp3",
-    win: "/sounds/game-win.mp3",
-    lose: "/sounds/game-over.mp3",
+    win: "/sounds/game-win.wav",
+    lose: "/sounds/game-over.wav",
     wrong: "/sounds/wrong.mp3"
   }
+
+  const start_info = "Make it to 12 to win!"
 
   const color_list = ["red", "green", "blue", "yellow"]
   let selected_tiles = []
   let color_sequence = []
   let comp_turn = true
-  let level_counter = 0
   let high_score_counter = 0
-
+  let round_counter = 0
 
 
   function playAudio(item) {
     const audio = new Audio(audio_files[item])
     audio.play()
   }
-
-
 
   function getElementByColor(color) {
     for (let i = 0; i < 4; i++) {
@@ -44,19 +43,19 @@ window.onload = function () {
     color_sequence.push(color_list[Math.floor(Math.random() * 4)])
   }
 
-  function incrementLevel() {
-    level_counter += 1
-    if (high_score_counter < level_counter) {
-      high_score_counter = level_counter - 1
+  function incrementLevel(round) {
+    if (round < 13) {
+      level.innerText = round
     }
-    level.innerText = level_counter
-    high_score.innerText = high_score_counter
-    console.log(level)
+    if (high_score_counter < round) {
+      high_score.innerText = round - 1
+    }
   }
 
   function playSequence() {
+    board.classList.add("unclickable")
     addToSequence()
-    incrementLevel()
+    console.log(color_sequence)
     for (let i = 0; i < color_sequence.length; i++) {
       const element = getElementByColor(color_sequence[i])
       setTimeout(function () {
@@ -67,45 +66,83 @@ window.onload = function () {
         }, 600)
       }, 1000 * i)
     }
+    setTimeout(() => {
+      board.classList.remove("unclickable")
+      comp_turn = false
+    }, 1000 * color_sequence.length)
   }
 
-  // function letUserClick() {
-  //   board.classList.remove("unclickable")
-  // }
 
-  // function checkColor(element) {
-  //   const color = element.getAttribute(`data-tile`)
-  //   selected_tiles.push(color)
-  //   if (color !== color_sequence[selected_tiles.length - 1]) {
-  //     playAudio("wrong")
-  //     color_sequence = []
-  //     setTimeout(function () {
-  //       alert("YOU LOSE")
-  //     }, 500)
+  function validateClickedColor(element) {
+    const element_color = element.getAttribute(`data-tile`)
+    console.log(color_sequence, selected_tiles)
 
-  //   } else {
-  //     playAudio(color)
-  //   }
-  // }
+    if (element_color === color_sequence[selected_tiles.length]) {
+      selected_tiles.push(element_color)
+      console.log(color_sequence, selected_tiles)
+      console.log(color_sequence.length == selected_tiles.length)
+      playAudio(element_color)
+      if (color_sequence.length == selected_tiles.length) {
+        selected_tiles = []
+        board.classList.add("unclickable")
+        setTimeout(() => {
+          comp_turn = true
+          playGame()
+        }, 1000)
 
-  // tiles.forEach(element => {
-  //   element.addEventListener("click", function () {
-  //     checkColor(element)
-  //   })
-  // })
+      }
+    } else {
+      playAudio("wrong")
+      board.classList.add("unclickable")
+      round_counter = 0
+      comp_turn = true
+      color_sequence = []
+      setTimeout(() => {
+        playAudio("lose")
+        info.innerText = "You Lose"
+        info.style.color = "red"
+        info.style.fontWeight = "1000"
+        info.style.fontSize = "32px"
+        play.style.display = "block"
+      }, 600)
+    }
+  }
+
+  function hidePlayButton() {
+    play.style.display = "none"
+    info.innerText = start_info
+    info.style.fontWeight = "1000"
+    info.style.fontSize = "24px"
+    info.style.color = "white"
+    info.style.fontSize = "16px"
+  }
 
   const playGame = () => {
-    if (comp_turn) {
-      playSequence()
-    } else { letUserClick() }
+    if (round_counter < 2) {
+      round_counter++
+      incrementLevel(round_counter)
+      if (comp_turn) {
+        playSequence()
+      }
+    } else {
+      playAudio("win")
+      info.innerText = "You Win"
+      info.style.color = "green"
+      info.style.fontSize = "32px"
+      play.style.display = "block"
+      round_counter = 0
+      playSequence = []
+    }
   }
 
-  play.addEventListener("click", () => {
-    playGame()
-    // playSequence()
-    // letUserClick()
-    // selected_tiles = []
+  tiles.forEach(element => {
+    element.addEventListener("click", function () {
+      validateClickedColor(element)
+    })
+  })
 
-    console.log(color_sequence)
+  play.addEventListener("click", () => {
+    hidePlayButton()
+    playGame()
   })
 }
